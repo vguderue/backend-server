@@ -36,7 +36,8 @@ app.get('/renuevatoken', mdAutenticacion.verificaToken, (req, res) => {
 async function verify(token) {
     const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+        audience: CLIENT_ID,
+        // Specify the CLIENT_ID of the app that accesses the backend
         // Or, if multiple clients access the backend:
         //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
     });
@@ -91,7 +92,8 @@ app.post('/google', async(req, res) => {
                     ok: true,
                     usuario: usuarioDB,
                     token: token,
-                    id: usuarioDB._id
+                    id: usuarioDB._id,
+                    menu: obtenerMenu(usuarioDB.role)
                 });
             }
 
@@ -114,26 +116,12 @@ app.post('/google', async(req, res) => {
                     ok: true,
                     usuario: usuarioDB,
                     token: token,
-                    id: usuarioDB._id
+                    id: usuarioDB._id,
+                    menu: obtenerMenu(usuarioDB.role)
                 });
-
             });
-
         }
-
-
     });
-
-
-
-
-    // return res.status(200).json({
-    //     ok: true,
-    //     mensaje: 'OK!!!',
-    //     googleUser: googleUser
-    // });
-
-
 });
 
 // ==========================================
@@ -181,10 +169,7 @@ app.post('/', (req, res) => {
             id: usuarioDB._id,
             menu: obtenerMenu(usuarioDB.role)
         });
-
     })
-
-
 });
 
 
@@ -213,15 +198,10 @@ function obtenerMenu(ROLE) {
         }
     ];
 
-    console.log('ROLE', ROLE);
-
     if (ROLE === 'ADMIN_ROLE') {
         menu[1].submenu.unshift({ titulo: 'Usuarios', url: '/usuarios' });
     }
-
-
     return menu;
-
 }
 
 
